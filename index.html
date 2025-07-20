@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Heróis - Clash of Clans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="/logo.png" alt="Clash of Clans Logo" class="logo">
+                <h1>Calculadora de Níveis de Heróis</h1>
+            </div>
+            <p class="subtitle">Calcule o custo e tempo para evoluir seus heróis no Clash of Clans</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="max-level">Maximização</button>
+            <button class="tab-btn" data-tab="custom-search">Busca Personalizada</button>
+        </div>
+        
+        <div class="tab-content active" id="max-level">
+            <div class="section">
+                <h2><i class="fas fa-crown"></i> Pesquisa de Níveis Máximos</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="townHall"><i class="fas fa-home"></i> Nível do Centro de Vila:</label>
+                        <select id="townHall" class="styled-select">
+                            <option value="">Selecione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="heroHallGroup" style="display: none;">
+                        <label for="heroHall"><i class="fas fa-chess-king"></i> Nível do Salão de Heróis:</label>
+                        <select id="heroHall" class="styled-select">
+                            <option value="">Selecione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="heroLevelsContainer" style="display: none;">
+                    <h3><i class="fas fa-arrow-up"></i> Níveis Atuais dos Heróis</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="barbarianKing"><i class="fas fa-chess-king"></i> Rei Bárbaro:</label>
+                            <input type="number" id="barbarianKing" min="1" value="1" class="styled-input">
+                        </div>
+                        
+                        <div class="form-group" id="archerQueenGroup" style="display: none;">
+                            <label for="archerQueen"><i class="fas fa-chess-queen"></i> Rainha Arqueira:</label>
+                            <input type="number" id="archerQueen" min="1" value="1" class="styled-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group" id="battleMachineGroup" style="display: none;">
+                            <label for="battleMachine"><i class="fas fa-robot"></i> Príncipe Servo:</label>
+                            <input type="number" id="battleMachine" min="1" value="1" class="styled-input">
+                        </div>
+
+                        <div class="form-group" id="grandWardenGroup" style="display: none;">
+                            <label for="grandWarden"><i class="fas fa-hat-wizard"></i> Grande Guardião:</label>
+                            <input type="number" id="grandWarden" min="1" value="1" class="styled-input">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group" id="royalChampionGroup" style="display: none;">
+                        <label for="royalChampion"><i class="fas fa-shield-alt"></i> Campeã Real:</label>
+                        <input type="number" id="royalChampion" min="1" value="1" class="styled-input">
+                    </div>
+                </div>
+                
+                <button id="calculateMax" class="btn-primary"><i class="fas fa-calculator"></i> Calcular Níveis Máximos</button>
+                <div id="loadingSpinner" class="spinner"></div>
+                
+                <div id="maxResults" class="results">
+                    <h3><i class="fas fa-chart-line"></i> Resultados para Maximização</h3>
+                    <div id="heroCardsContainer" class="cards-grid"></div>
+                    
+                    <div id="summaryContainer" class="summary-card">
+                        <h3><i class="fas fa-clipboard-list"></i> Resumo</h3>
+                        <div class="summary-stats">
+                            <div class="stat">
+                                <div class="stat-label">Custo Total</div>
+                                <div class="stat-value" id="totalCost">0</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Tempo Total</div>
+                                <div class="stat-value" id="totalTime">0h</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Nível Médio</div>
+                                <div class="stat-value" id="averageLevel">0</div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="custom-search">
+            <div class="section custom-search">
+                <h2><i class="fas fa-search"></i> Busca Personalizada</h2>
+                
+                <div class="hero-selector-container">
+                    <div class="hero-selector">
+                        <h3><i class="fas fa-chess-king"></i> Rei Bárbaro</h3>
+                        <div class="range-selector">
+                            <div class="form-group">
+                                <label for="customBKStart">Nível Inicial:</label>
+                                <input type="number" id="customBKStart" min="1" value="1" class="styled-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="customBKEnd">Nível Desejado:</label>
+                                <input type="number" id="customBKEnd" min="1" value="1" class="styled-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-selector">
+                        <h3><i class="fas fa-chess-queen"></i> Rainha Arqueira</h3>
+                        <div class="range-selector">
+                            <div class="form-group">
+                                <label for="customAQStart">Nível Inicial:</label>
+                                <input type="number" id="customAQStart" min="1" value="1" class="styled-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="customAQEnd">Nível Desejado:</label>
+                                <input type="number" id="customAQEnd" min="1" value="1" class="styled-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-selector">
+                        <h3><i class="fas fa-robot"></i> Príncipe Servo</h3>
+                        <div class="range-selector">
+                            <div class="form-group">
+                                <label for="customBMStart">Nível Inicial:</label>
+                                <input type="number" id="customBMStart" min="1" value="1" class="styled-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="customBMEnd">Nível Desejado:</label>
+                                <input type="number" id="customBMEnd" min="1" value="1" class="styled-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-selector">
+                        <h3><i class="fas fa-hat-wizard"></i> Grande Guardião</h3>
+                        <div class="range-selector">
+                            <div class="form-group">
+                                <label for="customGWStart">Nível Inicial:</label>
+                                <input type="number" id="customGWStart" min="1" value="1" class="styled-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="customGWEnd">Nível Desejado:</label>
+                                <input type="number" id="customGWEnd" min="1" value="1" class="styled-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-selector">
+                        <h3><i class="fas fa-shield-alt"></i> Campeã Real</h3>
+                        <div class="range-selector">
+                            <div class="form-group">
+                                <label for="customRCStart">Nível Inicial:</label>
+                                <input type="number" id="customRCStart" min="1" value="1" class="styled-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="customRCEnd">Nível Desejado:</label>
+                                <input type="number" id="customRCEnd" min="1" value="1" class="styled-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="calculateCustom" class="btn-primary"><i class="fas fa-calculator"></i> Calcular Busca Personalizada</button>
+                <div id="customLoadingSpinner" class="spinner"></div>
+                
+                <div id="customResults" class="results">
+                    <h3><i class="fas fa-chart-pie"></i> Resultados da Busca Personalizada</h3>
+                    <div id="customHeroCardsContainer" class="cards-grid"></div>
+                    
+                    <div id="customSummaryContainer" class="summary-card">
+                        <h3><i class="fas fa-clipboard-list"></i> Resumo</h3>
+                        <div class="summary-stats">
+                            <div class="stat">
+                                <div class="stat-label">Custo Total</div>
+                                <div class="stat-value" id="customTotalCost">0</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Tempo Total</div>
+                                <div class="stat-value" id="customTotalTime">0h</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Nível Médio</div>
+                                <div class="stat-value" id="customAverageLevel">0</div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div id="customProgressBar" class="progress-bar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>Calculadora de Heróis - Clash of Clans © 2025</p>
+            <p>Não afiliado à Supercell. Todos os direitos dos jogos pertencem aos seus respectivos donos.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
